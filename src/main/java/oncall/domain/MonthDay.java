@@ -1,23 +1,10 @@
 package oncall.domain;
 
-public class MonthDay {
-    private int month;
-    private int day;
+import oncall.enumeration.Day;
+import oncall.enumeration.Month;
 
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
-    }
-
+public record MonthDay(
+        Month month,
+        Day day
+) {
 }
