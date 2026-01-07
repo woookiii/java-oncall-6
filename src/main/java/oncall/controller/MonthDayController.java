@@ -26,7 +26,7 @@ public class MonthDayController {
     }
 
     private MonthDay getInput() {
-        System.out.print(GuideMessage.MONTH_DAY);
+        System.out.print(GuideMessage.MONTH_DAY.getMessage());
         String monthDayInput = Console.readLine();
         List<String> splitMonthDay = List.of(monthDayInput.split(","));
         monthDayValidator.isInputSizeRight(splitMonthDay);

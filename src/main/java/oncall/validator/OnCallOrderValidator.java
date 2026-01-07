@@ -25,7 +25,7 @@ public class OnCallOrderValidator {
     }
 
     private void isNickNameLengthValid(String nickName) {
-        if (nickName.length() > 5) {
+        if (nickName.length() > 5 || nickName.isEmpty()) {
             throw new IllegalArgumentException(GuideMessage.ERROR.getMessage());
         }
     }
