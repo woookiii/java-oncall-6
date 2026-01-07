@@ -8,45 +8,34 @@ import java.util.*;
 public class OnCallService {
 
     public List<String> makeTable(MonthDay monthDay, OnCallOrder onCallOrder) {
-        int weekdayIndex = 0;
-        int restDayIndex = 0;
         int dayIndex = monthDay.day().getIndex();
-        final int workerSize = onCallOrder.weekday().size();
         final Queue<String> w = new LinkedList<>(onCallOrder.weekday());
         final Queue<String> r = new LinkedList<>(onCallOrder.restDay());
         addEnoughEntry(r, onCallOrder.restDay());
         addEnoughEntry(w, onCallOrder.weekday());
         String lastWorker = "";
 
-        final List<String> table = new ArrayList<>();
-        build(monthDay, dayIndex, r, lastWorker, table, w);
-        return table;
+        return build(monthDay, w, r, lastWorker, dayIndex);
     }
 
-    private void build(MonthDay monthDay, int dayIndex, Queue<String> r, String lastWorker, List<String> table, Queue<String> w) {
+    private List<String> build(MonthDay monthDay, Queue<String> w, Queue<String> r, String lastWorker, int dayIndex) {
+        final List<String> table = new ArrayList<>();
         for (int i = 1; i <= monthDay.month().getLength(); i++) {
             if (dayIndex == 5 || dayIndex == 6 || monthDay.month().getHoliday().contains(i)) {
                 lastWorker = chooseDayWorker(r, lastWorker, table);
+                dayIndex = getNextIndex(dayIndex);
                 continue;
             }
-            String wCandidate = w.poll();
-            if(!wCandidate.equals(lastWorker)){
-                table.add(wCandidate);
-                lastWorker = wCandidate;
-                continue;
-            }
-            String wNext = w.poll();
-            w.add(wCandidate);
-            table.add(wNext);
-            lastWorker = wNext;
-
-            dayIndex = getNextIndex(dayIndex, 6);
+            lastWorker = chooseDayWorker(w, lastWorker, table);
+            dayIndex = getNextIndex(dayIndex);
         }
+        return table;
     }
 
     private static String chooseDayWorker(Queue<String> r, String lastWorker, List<String> table) {
         String rCandidate = r.poll();
-        if(!rCandidate.equals(lastWorker)){
+        assert rCandidate != null;
+        if (!rCandidate.equals(lastWorker)) {
             table.add(rCandidate);
             lastWorker = rCandidate;
             return lastWorker;
@@ -73,9 +62,8 @@ public class OnCallService {
     }
 
 
-
-    private int getNextIndex(int index, int size) {
-        if (++index == size) {
+    private int getNextIndex(int index) {
+        if (++index == 7) {
             index = 0;
         }
         return index;
